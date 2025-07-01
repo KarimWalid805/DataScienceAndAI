@@ -1,0 +1,66 @@
+---
+title: "Homework2"
+author: "Karim Walid"
+date: "2025-03-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+##Exercise 1
+```{r}
+setwd("C:/Users/karim/Downloads")
+ab_test <- read.csv("productivity_data.csv")
+head(ab_test)
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r}
+ab_test$group <- factor(ab_test$group, levels = c("training", "teamwork"))
+
+ggplot(ab_test, aes(x = productivity)) + 
+    geom_histogram(fill = "steelblue", col = "black", bins = 13) +
+    facet_wrap(~ group, ncol = 1, scales = "free_y") +
+    labs(x = "Productivity (Tasks Completed Per Day)", y = "Frequency") + 
+    theme_classic()
+```
+```{r}
+library(car)
+```
+
+```{r}
+tapply(ab_test$productivity, ab_test$group, sd)
+```
+
+```{r}
+tapply(ab_test$productivity, ab_test$group, length)
+```
+##B.
+```{r}
+leveneTest(data = ab_test, productivity ~ group)
+```
+```{r}
+t.test(productivity ~ group, data = ab_test, var.equal = TRUE)
+```
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+##D.
+```{r}
+table <- data.frame(satisfied= c(35,41), unsatisifed = c(23,16), row.names = c("male","female"))
+table
+```
+```{r}
+chisq.test(table)
+```
